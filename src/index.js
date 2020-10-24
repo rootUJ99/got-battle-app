@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
+// doing stuff with vim im feeling powerful as fuck
 ReactDOM.render(
   <React.StrictMode>
     <App />
