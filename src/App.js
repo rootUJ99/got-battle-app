@@ -1,24 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{ useState } from 'react';
 import './App.css';
 
-function App() {
+const InputName = 'searchInput';
+
+const App = () => {
+  const [searchData, setSearchData] = useState({
+    [InputName]: '',
+  });
+  const [responseData, setResponseData] = useState({});
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:5000/api/search?location=${searchData.searchInput}`, {method: 'GET'});
+      const data = await response.json();
+      setResponseData(data);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const onChange = (e) => {
+    console.log(e.target.name, e.target.value);
+    setSearchData({
+      ...searchData,
+      [e.target.name] : e.target.value
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={onSubmit}>
+        <input name={InputName} value={searchData.searchInput} onChange={onChange}/>
+        <button type="submit">search</button>
+      </form>
+      <div>
+        {responseData?.searchedData?.map(it => <pre>
+          {JSON.stringify(it)}
+        </pre>)}
+      </div>
     </div>
   );
 }
