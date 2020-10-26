@@ -26,11 +26,6 @@ mongoose.connect(dataBaseURI, {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get('/api/hello', (req, res)=> {
-  res.send({
-    hello: 'world'
-  })
-});
 app.use('/api', routes);
 
 if (process.env.NODE_ENV === 'production'){

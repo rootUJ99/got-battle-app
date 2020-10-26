@@ -18,4 +18,28 @@ router.get('/search',async (req,res)=> {
 }
 });
 
+router.get('/list', async(req, res)=> {
+  try {
+    const locationsQuery = await battleModel.find().select('location -_id');
+    const locations = locationsQuery.map(it=> it.location);
+    res.send({
+      locations,
+    })
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get('/count', async(req, res)=> {
+  try {
+    const count = await battleModel.find().count();
+    console.log(count);
+    res.send({
+      count,
+    })
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 export default router;
