@@ -9,7 +9,7 @@ router.get('/search',async (req,res)=> {
     const searchedData = await battleModel.find({
       ...req.query
     });
-    console.log(searchedData);
+    // console.log(searchedData);
     res.send({
       searchedData,
   });
@@ -36,7 +36,7 @@ router.get('/list', async(req, res)=> {
 router.get('/count', async(req, res)=> {
   try {
     const count = await battleModel.find().count();
-    console.log(count);
+    // console.log(count);
     res.send({
       count,
     })
