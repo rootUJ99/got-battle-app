@@ -20,7 +20,10 @@ router.get('/search',async (req,res)=> {
 
 router.get('/list', async(req, res)=> {
   try {
-    const locationsQuery = await battleModel.find().select('location -_id');
+    const locationsQuery = await battleModel.find({}, {
+      location: 1,
+      _id: 0,
+    }).where('location').ne("");
     const locations = locationsQuery.map(it=> it.location);
     res.send({
       locations,

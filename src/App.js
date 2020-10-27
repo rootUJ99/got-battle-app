@@ -12,7 +12,7 @@ const App = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/search?location=${searchData.searchInput}`, {method: 'GET'});
+      const response = await fetch(`/api/search?location=${searchData.searchInput}`, {method: 'GET'});
       const data = await response.json();
       setResponseData(data);
       console.log(data);

@@ -17,9 +17,11 @@
     "react-scripts": "3.4.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev-server": "nodemon server",
+    "client-start": "react-scripts start",
+    "server-start": "nodemon server",
+    "start": "concurrently \" npm run server-start\" \" npm run client-start\"",
     "server": "node server",
+    "prod-server": "npm run build; npm run server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
