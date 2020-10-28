@@ -3,6 +3,9 @@
   background-color: var(--primary);
   border-radius: 0.5rem;
 }
+.card:hover {
+  cursor: pointer;
+}
 h4 {
   font-weight: 600;
 }
