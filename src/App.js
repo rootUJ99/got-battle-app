@@ -1,4 +1,7 @@
 import React,{ useState } from 'react';
+import Button from './Components/Button/index.js';
+import Input from './Components/Input/index.js';
+import Card from './Components/Card/index.js';
 import './App.css';
 
 const InputName = 'searchInput';
@@ -12,7 +15,7 @@ const App = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/api/search?location=${searchData.searchInput}`, {method: 'GET'});
+      const response = await fetch(`/api/indexed-search?q=${searchData.searchInput}`, {method: 'GET'});
       const data = await response.json();
       setResponseData(data);
       console.log(data);
@@ -30,15 +33,22 @@ const App = () => {
   }
 
   return (
-    <div className="App">
+    <div className="app">
       <form onSubmit={onSubmit}>
-        <input name={InputName} value={searchData.searchInput} onChange={onChange}/>
-        <button type="submit">search</button>
+        <div className="search-container">
+          <Input name={InputName} value={searchData.searchInput} onChange={onChange}/>
+          <Button type="submit">search</Button>
+        </div>
       </form>
-      <div>
-        {responseData?.searchedData?.map(it => <pre>
-          {JSON.stringify(it)}
-        </pre>)}
+      <div className="card-container">
+        {responseData?.searchedData?.map(it => 
+          <Card title={it?.name} key={it._id}>
+            <div>
+                {it?.location}
+                {it?.attacker_outcome}
+            </div>
+          </Card>
+        )}
       </div>
     </div>
   );

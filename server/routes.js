@@ -28,7 +28,7 @@ router.get('/list', async(req, res)=> {
     res.send({
       locations,
     })
-  } catch (err) {
+  } catch (err) { 
     console.log(err);
   }
 });
@@ -40,6 +40,37 @@ router.get('/count', async(req, res)=> {
     res.send({
       count,
     })
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get('/indexed-search',async (req,res)=> {
+  try {
+    // console.log(req.query);
+    if ('q' in req.query){
+      const searchedData = await battleModel.find(
+        {
+          $text: {
+            $search: req.query.q,
+            $caseSensitive: false,
+          },
+        },
+        {
+          score: {
+            $meta: 'textScore',
+          }
+        }
+      ).sort({ score : { $meta : 'textScore' } });
+
+      return res.status(200).send({
+        searchedData,
+      });
+    }
+    // console.log(searchedData);
+    res.send({
+      'message': 'please use right query param',
+    });
   } catch (err) {
     console.log(err);
   }

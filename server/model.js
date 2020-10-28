@@ -90,5 +90,16 @@ const battleSchema = new Schema({
       "type": "String"
     }
 });
+
+battleSchema.index({
+    'name': 'text',
+    'attacker_king': 'text',
+    'defender_king': 'text',
+    'attacker_commander': 'text',
+    'defender_commander': 'text',
+    'location': 'text',
+    'region': 'text',
+  });
+
 const Battle = mongoose.model('battle', battleSchema);
 export default Battle;
