@@ -3,6 +3,7 @@ import Button from './Components/Button/index.js';
 import Input from './Components/Input/index.js';
 import Card from './Components/Card/index.js';
 import Modal from './Components/Modal/index.js';
+import Label from './Components/Label/index.js';
 import './App.css';
 
 const InputName = 'searchInput';
@@ -44,11 +45,26 @@ const App = () => {
     setSelectedData(selectedItem);
   }
 
+  const outcome = (result, cssFlag) => {
+    if (cssFlag) {
+      return result === 'win' 
+      ? 'green'
+      : 'red'
+    }
+    return result === 'win' 
+                  ? 'Attacker Won'
+                  : 'Attacker Defeated'
+  }
+
   return (
     <div className="app">
       <form onSubmit={onSubmit}>
         <div className="search-container">
-          <Input name={InputName} value={searchData.searchInput} onChange={handleSearchChange}/>
+          <Input 
+            name={InputName} 
+            placeholder='Search by battle name, king, commander, location, region'
+            value={searchData.searchInput} 
+            onChange={handleSearchChange}/>
           <Button type="submit">search</Button>
         </div>
       </form>
@@ -59,17 +75,49 @@ const App = () => {
             key={it._id} 
             onClick={()=>handleCardClick(it)}
           >
-            <div>
-                {it?.location}
-                {it?.attacker_outcome}
+            <div className="grid-with-gap">
+              <div>
+                  {it?.location}
+              </div>
+              <div className={outcome(it?.attacker_outcome, true)}>
+                {outcome(it?.attacker_outcome)}
+              </div>
             </div>
           </Card>
         )}
       </div>
-      <Modal toggle={toggleModel} onClose={handleModalClose}>
-        <div>
-          {selectedData?.location}
-          {selectedData?.attacker_outcome}
+      <Modal 
+        toggle={toggleModel} 
+        onClose={handleModalClose}
+        title={selectedData?.name}
+        >
+        <div className="grid-with-gap">
+            <div className="flex-container">
+            <div>
+              Region: {selectedData?.region}
+            </div>
+            <div>
+              Location: {selectedData?.location}
+            </div>
+            <div className={outcome(selectedData?.attacker_outcome, true)}>
+              {outcome(selectedData?.attacker_outcome)}
+            </div>
+            </div>
+          <div className="section">
+            <div className="grid-with-gap">
+              <Label>Attacker Details</Label>
+              {
+                Object.keys(selectedData).filter(it=> it.includes('attacker')&& !it.includes('attacker_outcome')).map(it=>selectedData[it] && <div>{it}{' : '} {selectedData[it]}</div>)
+              }
+            </div>
+            <div className="divider"/>
+            <div className="grid-with-gap">
+              <Label>Defender Details</Label>
+            {
+                Object.keys(selectedData).filter(it=> it.includes('defender')).map(it=>selectedData[it] && <div>{it}{' : '} {selectedData[it]}</div>)
+            }
+            </div>
+          </div>
         </div>
       </Modal>
     </div>

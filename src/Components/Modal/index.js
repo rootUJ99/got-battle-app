@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles.css';
-const Modal = ({children, toggle, onClose}) => {
+const Modal = ({children, toggle, title, onClose}) => {
   return (
     <div>
       {
@@ -12,6 +12,7 @@ const Modal = ({children, toggle, onClose}) => {
             > 
               <button className="close-button">x</button>
             </div>
+            <h4>{title}</h4>
             {children}
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import './styles.css';
 
 const Card = ({title, children, onClick}) => {

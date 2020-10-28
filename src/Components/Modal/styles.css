@@ -1,5 +1,7 @@
 .modal {
   position: fixed;
+  height: 100%;
+  margin: 0;
   z-index: 100;
   top: 0;
   bottom: 0;
@@ -10,6 +12,7 @@
   background-color: rgba(0, 0, 0, 0.4);
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 
 .content {
@@ -18,6 +21,7 @@
   background: var(--primary);
   border-radius: 2rem;
   padding: 2rem;
+  overflow: scroll;
 }
 
 @media(max-width: 600px) {
@@ -43,4 +47,8 @@
   border-radius: 50%;
   width: 1.5rem;
   height: 1.5rem;
+}
+
+h4 {
+  font-weight: 600;
 }
