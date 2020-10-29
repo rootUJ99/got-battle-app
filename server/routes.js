@@ -5,16 +5,36 @@ const router = express.Router();
 
 router.get('/search',async (req,res)=> {
   try {
-    console.log(req.query);
+    // console.log(req.query);
+    const {king, commander, ...rest} = req.query;
+    let queryForKingAndCommander = {};
+    if( king && commander) {
+      queryForKingAndCommander = {$and: [
+        {$or: [{attacker_commander: commander}, {defender_commander: commander}]},
+        {$or: [{attacker_king: king}, {defender_king: king}]},
+      ]};
+    } else if (king) {
+      queryForKingAndCommander = {$or: [{attacker_king: king}, {defender_king: king}]}
+    } else if (commander) {
+      queryForKingAndCommander =  {$or: [{attacker_commander: commander}, {defender_commander: commander}]}
+    } else {
+      queryForKingAndCommander = {};
+    }
+    // console.log(queryForKingAndCommander, ' ', rest);
     const searchedData = await battleModel.find({
-      ...req.query
+      ...queryForKingAndCommander,
+      ...rest
     });
     // console.log(searchedData);
     res.send({
+      status: 'success',
       searchedData,
   });
 } catch (err) {
-  console.log(err);
+  res.status(400).send({
+      status: 'fail',
+      message: err
+    });
 }
 });
 
@@ -26,6 +46,7 @@ router.get('/list', async(req, res)=> {
     }).where('location').ne("");
     const locations = locationsQuery.map(it=> it.location);
     res.send({
+      status: 'success',
       locations,
     })
   } catch (err) { 
@@ -38,10 +59,14 @@ router.get('/count', async(req, res)=> {
     const count = await battleModel.find().count();
     // console.log(count);
     res.send({
+      status: 'success',
       count,
     })
   } catch (err) {
-    console.log(err);
+    res.status(400).send({
+      status: 'fail',
+      message: err
+    });
   }
 });
 
@@ -64,15 +89,20 @@ router.get('/indexed-search',async (req,res)=> {
       ).sort({ score : { $meta : 'textScore' } });
 
       return res.status(200).send({
+        status: 'success',
         searchedData,
       });
     }
     // console.log(searchedData);
-    res.send({
+    res.status(400).send({
+      'status': 'fail',
       'message': 'please use right query param',
     });
   } catch (err) {
-    console.log(err);
+    res.status(400).send({
+      status: 'fail',
+      message: err
+    });
   }
 });
 
